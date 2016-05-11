@@ -6,17 +6,6 @@ import java.io.UnsupportedEncodingException;
 
 public class JTree {
 
-	// output to console
-	// 1つFileをもらって配下を表示する
-	static void printFilesConsole(int lvl, File f){
-		for(File i : f.listFiles()){
-			System.out.println(lvl + "\t\t" + i.getName());
-			if(i.isDirectory()){
-				printFilesConsole(lvl + 1, i);
-			}
-		}
-	}
-
 	// output windows tree method
 	static void printFilesTree(String forMe, String forSub, File f) throws UnsupportedEncodingException{
 		PrintStream out = new PrintStream(System.out, true, "UTF-8");
@@ -29,8 +18,6 @@ public class JTree {
 		}
 	}
 	public static void main(String[] args) throws UnsupportedEncodingException {
-		//printFilesConsole(0, new File("D:\\books\\000分类中\\disk.20160510-1"));
-		//printFilesTree("", new File("D:\\books\\000分类中\\disk.20160510-1"));
 		if(args.length<1){
 			System.out.println("Usage: JTree path");
 		}else{
