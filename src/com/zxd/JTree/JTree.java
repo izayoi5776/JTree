@@ -1,10 +1,18 @@
 package com.zxd.JTree;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-public class JTree {
+import javax.swing.JFrame;
+
+public class JTree extends DropTarget{
 
 	// output windows tree method
 	static void printFilesTree(String forMe, String forSub, File f) throws UnsupportedEncodingException{
@@ -19,10 +27,30 @@ public class JTree {
 	}
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		if(args.length<1){
-			System.out.println("Usage: JTree path");
+			//System.out.println("Usage: JTree path");
+		    JFrame frame = new JFrame("JTree");
+		    frame.setBounds(100, 100, 400, 320);
+		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    frame.setVisible(true);
+		    frame.setDropTarget(new JTree());
+
 		}else{
 			printFilesTree("", "", new File(args[0]));
 		}
 	}
-
+	public void drop(DropTargetDropEvent dtde) {
+		Transferable t = dtde.getTransferable();
+		if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+			dtde.acceptDrop(DnDConstants.ACTION_REFERENCE);
+			try {
+				List list = (List)t.getTransferData(DataFlavor.javaFileListFlavor);
+				for (int i = 0; i < list.size(); i++) {
+					File f = (File) list.get(i);
+					printFilesTree("", "", f);
+				}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 }
